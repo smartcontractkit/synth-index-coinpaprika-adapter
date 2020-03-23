@@ -38,7 +38,8 @@ const createRequest = async (input, callback) => {
   try {
     const priceDatas = await getPriceData()
     await Promise.all(data.index.map(async (synth) => {
-      synth.priceData = priceDatas.find(d => d.symbol.toLowerCase() === synth.symbol.toLowerCase())
+      synth.priceData = priceDatas.sort((a, b) => (a.rank > b.rank) ? 1 : -1)
+                                  .find(d => d.symbol.toLowerCase() === synth.symbol.toLowerCase())
     }))
     data.result = calculateIndex(data.index)
     callback(200, {
